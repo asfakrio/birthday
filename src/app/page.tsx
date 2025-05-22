@@ -93,8 +93,6 @@ export default function HomePage() {
       if (backgroundMusicRef.current.paused) {
         backgroundMusicRef.current.play().catch(error => {
           console.error("Error trying to play background music on voice request:", error);
-          // Toast if background music specifically fails to play here.
-          // The initial autoplay failure toast in handleOpenGift might be sufficient for most cases.
           toast({
             title: "Music Playback Issue",
             description: "Could not start background music. You can try the mute/unmute button.",

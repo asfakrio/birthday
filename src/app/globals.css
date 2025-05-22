@@ -162,4 +162,29 @@ body {
     animation: giftBoxHide 0.5s ease-out forwards;
     animation-delay: 0.3s; /* Delay slightly after lid animation */
   }
+
+  @keyframes float-up-and-fade {
+    0% {
+      opacity: 0;
+      /* transform is inherited from the element's style attribute (initial state) */
+    }
+    20% { /* Fade in */
+      opacity: 0.7; /* This will be 0.7 of the color's alpha, e.g., 0.7 * 0.6 = 0.42 final opacity */
+    }
+    90% { /* Hold visibility */
+      opacity: 0.6;
+    }
+    100% { /* Fade out and transform to target state */
+      opacity: 0;
+      transform: translateY(var(--translate-y-target)) 
+                 translateX(var(--translate-x-target)) 
+                 rotate(var(--rotate-target)) 
+                 scale(var(--scale-target));
+    }
+  }
+  .animate-float-up-fade {
+    animation-name: float-up-and-fade;
+    animation-timing-function: cubic-bezier(0.17, 0.67, 0.83, 0.67); 
+    animation-fill-mode: forwards;
+  }
 }

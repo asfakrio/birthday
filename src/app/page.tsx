@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import GiftBox from '@/components/GiftBox';
 import BirthdayContent from '@/components/BirthdayContent';
+import FloatingHearts from '@/components/FloatingHearts'; // Import the new component
 import { generatePoem, type GeneratePoemInput } from '@/ai/flows/generate-poem';
 import { Button } from '@/components/ui/button';
 import { Volume2, VolumeX } from 'lucide-react';
@@ -20,24 +21,18 @@ export default function HomePage() {
   const [generatedPoem, setGeneratedPoem] = useState<string | null>(null);
   const [isLoadingPoem, setIsLoadingPoem] = useState(false);
   const [showFinalSurprise, setShowFinalSurprise] = useState(false);
-  const [playVoiceTrigger, setPlayVoiceTrigger] = useState(false); // To trigger voice play from BirthdayContent
+  const [playVoiceTrigger, setPlayVoiceTrigger] = useState(false);
+  const [showHeartAnimation, setShowHeartAnimation] = useState(false); // State for heart animation
 
   const backgroundMusicRef = useRef<HTMLAudioElement | null>(null);
   const [isMuted, setIsMuted] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
-    // Preload audio
     const bgMusic = new Audio('/music.mp3');
     bgMusic.loop = true;
     backgroundMusicRef.current = bgMusic;
-    // Set initial muted state from the audio element's default, though it's usually false
     setIsMuted(bgMusic.muted);
-
-
-    // It's good practice to also preload voice.mp3 if it's consistently used.
-    // However, BirthdayContent creates its own Audio instance for voice.mp3.
-    // For simplicity here, we'll let BirthdayContent handle its own preloading/instance.
 
     return () => {
       if (backgroundMusicRef.current) {
@@ -50,9 +45,17 @@ export default function HomePage() {
 
   const handleOpenGift = async () => {
     setIsGiftOpened(true);
+    setShowHeartAnimation(true); // Show heart animation
+
+    // Optional: Hide heart animation after a few seconds
+    // Average animation duration is ~2.75s + max delay 0.8s = ~3.55s. Hide after 4-5s.
+    setTimeout(() => {
+      setShowHeartAnimation(false);
+    }, 5000);
+
+
     if (backgroundMusicRef.current) {
       try {
-        // Ensure music is unmuted before playing if controlled by our state
         backgroundMusicRef.current.muted = isMuted; 
         await backgroundMusicRef.current.play();
       } catch (error) {
@@ -100,6 +103,7 @@ export default function HomePage() {
   
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground p-4 selection:bg-primary/30 selection:text-primary-foreground overflow-hidden">
+      {showHeartAnimation && <FloatingHearts />} {/* Conditionally render FloatingHearts */}
       {!isGiftOpened ? (
         <GiftBox onOpen={handleOpenGift} />
       ) : (

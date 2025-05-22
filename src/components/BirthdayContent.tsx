@@ -10,7 +10,7 @@ interface BirthdayContentProps {
   poem: string | null;
   isLoadingPoem: boolean;
   onVoicePlayRequest: () => void;
-  playVoiceTrigger: boolean; 
+  playVoiceTrigger: boolean;
   onVoiceEnded: () => void;
   showFinalSurprise: boolean;
 }
@@ -40,20 +40,21 @@ export default function BirthdayContent({
     };
 
     const handleAudioError = (e: Event) => {
-      console.error('Voice audio error:', e);
+      // Log the MediaError object from the audio element for more details
+      console.error('Voice audio error:', voiceAudioRef.current?.error);
       setIsVoicePlaying(false);
       setVoiceButtonText("Couldn't Play Voice"); // Update button on error
       onVoiceEnded(); // Still call onVoiceEnded to proceed with the flow
     };
-    
+
     audio.addEventListener('ended', handleAudioEnd);
     audio.addEventListener('error', handleAudioError);
-    
+
     return () => {
       if (voiceAudioRef.current) {
         voiceAudioRef.current.removeEventListener('ended', handleAudioEnd);
         voiceAudioRef.current.removeEventListener('error', handleAudioError);
-        voiceAudioRef.current.pause(); 
+        voiceAudioRef.current.pause();
         voiceAudioRef.current = null;
       }
     };
@@ -144,7 +145,7 @@ export default function BirthdayContent({
               Happy Birthday, my heartbeat.
             </p>
           </div>
-          
+
           <div className="flex justify-center space-x-3 md:space-x-4 pt-4 md:pt-6">
             {[...Array(3)].map((_, i) => (
               <Heart

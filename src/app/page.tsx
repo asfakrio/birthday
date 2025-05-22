@@ -37,7 +37,6 @@ export default function HomePage() {
     backgroundMusicRef.current = bgMusic;
     
     // Set initial muted state based on audio element's actual muted state
-    // Though we initialize it to true, this syncs if browser has other ideas.
     setIsMuted(bgMusic.muted); 
 
     return () => {
@@ -58,12 +57,10 @@ export default function HomePage() {
 
     if (backgroundMusicRef.current) {
       try {
-        // Attempt to play only if unmuted by user interaction later or if already unmuted
         backgroundMusicRef.current.muted = isMuted; 
         await backgroundMusicRef.current.play();
       } catch (error) {
         console.error("Background music autoplay error:", error);
-        // Inform user if autoplay was blocked, common browser behavior
         toast({
           title: "Music Playback Notice",
           description: "Browser may have prevented automatic music playback. Use the mute/unmute button to control sound.",
@@ -90,6 +87,22 @@ export default function HomePage() {
   };
 
   const handleVoicePlayRequest = () => {
+    if (backgroundMusicRef.current) {
+      // Ensure the muted state is respected
+      backgroundMusicRef.current.muted = isMuted;
+      if (backgroundMusicRef.current.paused) {
+        backgroundMusicRef.current.play().catch(error => {
+          console.error("Error trying to play background music on voice request:", error);
+          // Toast if background music specifically fails to play here.
+          // The initial autoplay failure toast in handleOpenGift might be sufficient for most cases.
+          toast({
+            title: "Music Playback Issue",
+            description: "Could not start background music. You can try the mute/unmute button.",
+            variant: "default", 
+          });
+        });
+      }
+    }
     setPlayVoiceTrigger(true); 
   };
 

@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import { Button } from '@/components/ui/button';
-import { Heart, Loader2, PlayCircle, Headphones } from 'lucide-react'; // Removed Volume2, VolumeX as they are in parent
+import { Heart, Loader2, PlayCircle, Headphones } from 'lucide-react';
 
 interface BirthdayContentProps {
   poem: string | null;
@@ -41,17 +41,17 @@ export default function BirthdayContent({
 
     const handleAudioError = (e: Event) => {
       const audioEl = voiceAudioRef.current;
-      // Log details individually to avoid issues with complex object display in overlays
-      console.error('--- Voice Audio Error Event ---');
+      let errorMessage = 'Voice audio playback error. ';
+
       if (audioEl && audioEl.error) {
-        console.error('Error Code:', audioEl.error.code);
-        console.error('Error Message:', audioEl.error.message || 'No message available or empty string.');
+        errorMessage += `Code: ${audioEl.error.code}. `;
+        errorMessage += `Message: "${audioEl.error.message || 'No specific message.'}". `;
       } else {
-        console.error('MediaError object not found on the audio element itself.');
+        errorMessage += 'MediaError object not available on audio element. ';
       }
-      console.error('Event Type:', e.type);
-      // Note: Logging the full event 'e' can still be problematic for overlays.
-      // For deeper debugging, inspect 'e' in the browser's developer console.
+      errorMessage += `Event type: ${e.type}.`;
+
+      console.error(errorMessage);
 
       setIsVoicePlaying(false);
       setVoiceButtonText("Couldn't Play Voice"); // Update button on error
@@ -77,12 +77,14 @@ export default function BirthdayContent({
         setIsVoicePlaying(true);
         setVoiceButtonText("Playing...");
       }).catch(err => {
-        console.error("Error attempting to play voice:", err);
+        let playErrorMessage = "Error attempting to play voice. ";
         if(voiceAudioRef.current?.error){
-             console.error('Voice audio element error state after play().catch:');
-             console.error('Code:', voiceAudioRef.current.error.code);
-             console.error('Message:', voiceAudioRef.current.error.message || 'No message available');
+             playErrorMessage += `Audio Element Error Code: ${voiceAudioRef.current.error.code}. `;
+             playErrorMessage += `Message: "${voiceAudioRef.current.error.message || 'No message available'}". `;
         }
+        playErrorMessage += `Catch Exception: ${err}`;
+        console.error(playErrorMessage);
+        
         setIsVoicePlaying(false);
         setVoiceButtonText("Play My Voice"); // Reset on error
         onVoiceEnded(); // Proceed if voice can't play

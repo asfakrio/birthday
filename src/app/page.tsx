@@ -31,7 +31,7 @@ export default function HomePage() {
 
   useEffect(() => {
     // Initialize background music
-    const bgMusic = new Audio('/music.mp3'); // Assumes music.mp3 is in /public
+    const bgMusic = new Audio('/happy-birthday.mp3'); // Assumes happy-birthday.mp3 is in /public
     bgMusic.loop = true;
     bgMusic.volume = 0.4; // Example volume
     backgroundMusicRef.current = bgMusic;
@@ -67,7 +67,7 @@ export default function HomePage() {
         toast({
           title: "Music Playback Notice",
           description: "Browser may have prevented automatic music playback. Use the mute/unmute button to control sound.",
-          variant: "default", // Changed from destructive to default
+          variant: "default", 
         });
       }
     }

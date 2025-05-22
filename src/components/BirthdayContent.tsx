@@ -40,8 +40,16 @@ export default function BirthdayContent({
     };
 
     const handleAudioError = (e: Event) => {
-      // Log the MediaError object from the audio element for more details
-      console.error('Voice audio error:', voiceAudioRef.current?.error);
+      const audioEl = voiceAudioRef.current;
+      if (audioEl && audioEl.error) {
+        console.error('Voice audio error details:', {
+          code: audioEl.error.code,
+          message: audioEl.error.message || 'No message available', // message can be an empty string
+          targetEvent: e, // Log the original event as well
+        });
+      } else {
+        console.error('Voice audio error: MediaError object not found on audio element. Event:', e);
+      }
       setIsVoicePlaying(false);
       setVoiceButtonText("Couldn't Play Voice"); // Update button on error
       onVoiceEnded(); // Still call onVoiceEnded to proceed with the flow
@@ -66,7 +74,14 @@ export default function BirthdayContent({
         setIsVoicePlaying(true);
         setVoiceButtonText("Playing...");
       }).catch(err => {
-        console.error("Error playing voice:", err);
+        console.error("Error attempting to play voice:", err);
+        // Also check for MediaError on the element if catch is hit, though 'error' event is primary
+        if(voiceAudioRef.current?.error){
+             console.error('Voice audio element error state after play().catch:', {
+                code: voiceAudioRef.current.error.code,
+                message: voiceAudioRef.current.error.message || 'No message available',
+            });
+        }
         setIsVoicePlaying(false);
         setVoiceButtonText("Play My Voice"); // Reset on error
         onVoiceEnded(); // Proceed if voice can't play
@@ -75,16 +90,9 @@ export default function BirthdayContent({
   }, [playVoiceTrigger, onVoiceEnded, isVoicePlaying]); // Added isVoicePlaying to dependency array
 
   const handlePlayVoiceClick = () => {
-    // Only trigger play if it's not already playing and the audio element is ready and paused
     if (voiceAudioRef.current && voiceAudioRef.current.paused && !isVoicePlaying) {
-      onVoicePlayRequest(); // Signal parent to set playVoiceTrigger
+      onVoicePlayRequest(); 
     }
-    // Optional: Implement pause functionality if needed
-    // else if (voiceAudioRef.current && !voiceAudioRef.current.paused && isVoicePlaying) {
-    //   voiceAudioRef.current.pause();
-    //   setIsVoicePlaying(false);
-    //   setVoiceButtonText("Paused");
-    // }
   };
 
   return (

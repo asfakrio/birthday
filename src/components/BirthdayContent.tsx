@@ -77,13 +77,18 @@ export default function BirthdayContent({
         setIsVoicePlaying(true);
         setVoiceButtonText("Playing...");
       }).catch(err => {
-        let playErrorMessage = "Error attempting to play voice. ";
-        if(voiceAudioRef.current?.error){
-             playErrorMessage += `Audio Element Error Code: ${voiceAudioRef.current.error.code}. `;
-             playErrorMessage += `Message: "${voiceAudioRef.current.error.message || 'No message available'}". `;
+        let playPromiseErrorMessage = "Voice audio play() promise rejected. ";
+        if (err instanceof Error) {
+          playPromiseErrorMessage += `Error: ${err.name} - ${err.message}. `;
+        } else {
+          playPromiseErrorMessage += `Caught: ${String(err)}. `;
         }
-        playErrorMessage += `Catch Exception: ${err}`;
-        console.error(playErrorMessage);
+
+        const audioEl = voiceAudioRef.current;
+        if (audioEl && audioEl.error) {
+          playPromiseErrorMessage += `Current MediaError on element - Code: ${audioEl.error.code}, Message: "${audioEl.error.message || 'N/A'}".`;
+        }
+        console.error(playPromiseErrorMessage);
         
         setIsVoicePlaying(false);
         setVoiceButtonText("Play My Voice"); // Reset on error
@@ -172,3 +177,4 @@ export default function BirthdayContent({
     </div>
   );
 }
+

@@ -41,15 +41,18 @@ export default function BirthdayContent({
 
     const handleAudioError = (e: Event) => {
       const audioEl = voiceAudioRef.current;
+      // Log details individually to avoid issues with complex object display in overlays
+      console.error('--- Voice Audio Error Event ---');
       if (audioEl && audioEl.error) {
-        console.error('Voice audio error details:', {
-          code: audioEl.error.code,
-          message: audioEl.error.message || 'No message available', // message can be an empty string
-          targetEvent: e, // Log the original event as well
-        });
+        console.error('Error Code:', audioEl.error.code);
+        console.error('Error Message:', audioEl.error.message || 'No message available or empty string.');
       } else {
-        console.error('Voice audio error: MediaError object not found on audio element. Event:', e);
+        console.error('MediaError object not found on the audio element itself.');
       }
+      console.error('Event Type:', e.type);
+      // Note: Logging the full event 'e' can still be problematic for overlays.
+      // For deeper debugging, inspect 'e' in the browser's developer console.
+
       setIsVoicePlaying(false);
       setVoiceButtonText("Couldn't Play Voice"); // Update button on error
       onVoiceEnded(); // Still call onVoiceEnded to proceed with the flow
@@ -75,19 +78,17 @@ export default function BirthdayContent({
         setVoiceButtonText("Playing...");
       }).catch(err => {
         console.error("Error attempting to play voice:", err);
-        // Also check for MediaError on the element if catch is hit, though 'error' event is primary
         if(voiceAudioRef.current?.error){
-             console.error('Voice audio element error state after play().catch:', {
-                code: voiceAudioRef.current.error.code,
-                message: voiceAudioRef.current.error.message || 'No message available',
-            });
+             console.error('Voice audio element error state after play().catch:');
+             console.error('Code:', voiceAudioRef.current.error.code);
+             console.error('Message:', voiceAudioRef.current.error.message || 'No message available');
         }
         setIsVoicePlaying(false);
         setVoiceButtonText("Play My Voice"); // Reset on error
         onVoiceEnded(); // Proceed if voice can't play
       });
     }
-  }, [playVoiceTrigger, onVoiceEnded, isVoicePlaying]); // Added isVoicePlaying to dependency array
+  }, [playVoiceTrigger, onVoiceEnded, isVoicePlaying]);
 
   const handlePlayVoiceClick = () => {
     if (voiceAudioRef.current && voiceAudioRef.current.paused && !isVoicePlaying) {

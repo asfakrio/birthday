@@ -1,9 +1,10 @@
+
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import { Button } from '@/components/ui/button';
-import { Heart, Loader2, PlayCircle, Headphones, Volume2, VolumeX } from 'lucide-react';
+import { Heart, Loader2, PlayCircle, Headphones } from 'lucide-react'; // Removed Volume2, VolumeX as they are in parent
 
 interface BirthdayContentProps {
   poem: string | null;
@@ -28,20 +29,21 @@ export default function BirthdayContent({
   const voiceAudioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const audio = new Audio('/voice.mp3');
+    const audio = new Audio('/voice.mp3'); // Assumes voice.mp3 is in /public
+    audio.volume = 1.0; // Full volume for voice message
     voiceAudioRef.current = audio;
 
     const handleAudioEnd = () => {
       setIsVoicePlaying(false);
-      setVoiceButtonText("Play My Voice");
-      onVoiceEnded();
+      setVoiceButtonText("Play My Voice"); // Reset button text
+      onVoiceEnded(); // Signal parent that voice message has ended
     };
 
     const handleAudioError = (e: Event) => {
       console.error('Voice audio error:', e);
       setIsVoicePlaying(false);
-      setVoiceButtonText("Couldn't Play Voice");
-      onVoiceEnded(); 
+      setVoiceButtonText("Couldn't Play Voice"); // Update button on error
+      onVoiceEnded(); // Still call onVoiceEnded to proceed with the flow
     };
     
     audio.addEventListener('ended', handleAudioEnd);
@@ -58,28 +60,30 @@ export default function BirthdayContent({
   }, [onVoiceEnded]);
 
   useEffect(() => {
-    if (playVoiceTrigger && voiceAudioRef.current && !isVoicePlaying) {
+    if (playVoiceTrigger && voiceAudioRef.current && voiceAudioRef.current.paused && !isVoicePlaying) {
       voiceAudioRef.current.play().then(() => {
         setIsVoicePlaying(true);
         setVoiceButtonText("Playing...");
       }).catch(err => {
         console.error("Error playing voice:", err);
         setIsVoicePlaying(false);
-        setVoiceButtonText("Play My Voice");
+        setVoiceButtonText("Play My Voice"); // Reset on error
         onVoiceEnded(); // Proceed if voice can't play
       });
     }
-  }, [playVoiceTrigger, onVoiceEnded, isVoicePlaying]);
+  }, [playVoiceTrigger, onVoiceEnded, isVoicePlaying]); // Added isVoicePlaying to dependency array
 
   const handlePlayVoiceClick = () => {
+    // Only trigger play if it's not already playing and the audio element is ready and paused
     if (voiceAudioRef.current && voiceAudioRef.current.paused && !isVoicePlaying) {
       onVoicePlayRequest(); // Signal parent to set playVoiceTrigger
-    } else if (voiceAudioRef.current && !voiceAudioRef.current.paused && isVoicePlaying) {
-      // Optional: allow pausing
-      // voiceAudioRef.current.pause();
-      // setIsVoicePlaying(false);
-      // setVoiceButtonText("Paused");
     }
+    // Optional: Implement pause functionality if needed
+    // else if (voiceAudioRef.current && !voiceAudioRef.current.paused && isVoicePlaying) {
+    //   voiceAudioRef.current.pause();
+    //   setIsVoicePlaying(false);
+    //   setVoiceButtonText("Paused");
+    // }
   };
 
   return (
@@ -99,7 +103,7 @@ export default function BirthdayContent({
           cursor={true}
           repeat={0}
           className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary drop-shadow-lg"
-          style={{ whiteSpace: 'pre-line', minHeight: '100px' }} // minHeight to prevent layout shift
+          style={{ whiteSpace: 'pre-line', minHeight: '100px' }}
         />
       </div>
 
@@ -108,7 +112,7 @@ export default function BirthdayContent({
           onClick={handlePlayVoiceClick}
           disabled={isVoicePlaying && voiceButtonText === "Playing..."}
           className={`my-6 md:my-8 px-5 py-3 md:px-6 md:py-3 text-md md:text-lg bg-accent hover:bg-purple-500 text-accent-foreground rounded-full shadow-lg transition-all hover:shadow-xl transform hover:scale-105 animate-fadeIn-content ${isVoicePlaying ? 'opacity-70 cursor-default' : ''}`}
-          aria-label="Play My Voice"
+          aria-label={voiceButtonText}
         >
           {isVoicePlaying ? <Headphones className="mr-2 h-5 w-5 md:h-6 md:w-6 animate-pulse" /> : <PlayCircle className="mr-2 h-5 w-5 md:h-6 md:w-6" />}
           {voiceButtonText}

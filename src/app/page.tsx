@@ -1,9 +1,10 @@
+
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
 import GiftBox from '@/components/GiftBox';
 import BirthdayContent from '@/components/BirthdayContent';
-import FloatingHearts from '@/components/FloatingHearts'; // Import the new component
+import FloatingHearts from '@/components/FloatingHearts';
 import { generatePoem, type GeneratePoemInput } from '@/ai/flows/generate-poem';
 import { Button } from '@/components/ui/button';
 import { Volume2, VolumeX } from 'lucide-react';
@@ -22,17 +23,22 @@ export default function HomePage() {
   const [isLoadingPoem, setIsLoadingPoem] = useState(false);
   const [showFinalSurprise, setShowFinalSurprise] = useState(false);
   const [playVoiceTrigger, setPlayVoiceTrigger] = useState(false);
-  const [showHeartAnimation, setShowHeartAnimation] = useState(false); // State for heart animation
+  const [showHeartAnimation, setShowHeartAnimation] = useState(false);
 
   const backgroundMusicRef = useRef<HTMLAudioElement | null>(null);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true); // Start muted to comply with autoplay policies
   const { toast } = useToast();
 
   useEffect(() => {
-    const bgMusic = new Audio('/music.mp3');
+    // Initialize background music
+    const bgMusic = new Audio('/music.mp3'); // Assumes music.mp3 is in /public
     bgMusic.loop = true;
+    bgMusic.volume = 0.4; // Example volume
     backgroundMusicRef.current = bgMusic;
-    setIsMuted(bgMusic.muted);
+    
+    // Set initial muted state based on audio element's actual muted state
+    // Though we initialize it to true, this syncs if browser has other ideas.
+    setIsMuted(bgMusic.muted); 
 
     return () => {
       if (backgroundMusicRef.current) {
@@ -45,25 +51,23 @@ export default function HomePage() {
 
   const handleOpenGift = async () => {
     setIsGiftOpened(true);
-    setShowHeartAnimation(true); // Show heart animation
-
-    // Optional: Hide heart animation after a few seconds
-    // Average animation duration is ~2.75s + max delay 0.8s = ~3.55s. Hide after 4-5s.
+    setShowHeartAnimation(true);
     setTimeout(() => {
       setShowHeartAnimation(false);
     }, 5000);
 
-
     if (backgroundMusicRef.current) {
       try {
+        // Attempt to play only if unmuted by user interaction later or if already unmuted
         backgroundMusicRef.current.muted = isMuted; 
         await backgroundMusicRef.current.play();
       } catch (error) {
-        console.error("Music autoplay error:", error);
+        console.error("Background music autoplay error:", error);
+        // Inform user if autoplay was blocked, common browser behavior
         toast({
           title: "Music Playback Notice",
-          description: "Browser may have prevented automatic music playback. You can use the mute/unmute button.",
-          variant: "default",
+          description: "Browser may have prevented automatic music playback. Use the mute/unmute button to control sound.",
+          variant: "default", // Changed from destructive to default
         });
       }
     }
@@ -98,12 +102,15 @@ export default function HomePage() {
       const currentMutedState = !backgroundMusicRef.current.muted;
       backgroundMusicRef.current.muted = currentMutedState;
       setIsMuted(currentMutedState);
+      if (!currentMutedState && backgroundMusicRef.current.paused) {
+        backgroundMusicRef.current.play().catch(err => console.error("Error playing music on unmute:", err));
+      }
     }
   };
   
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground p-4 selection:bg-primary/30 selection:text-primary-foreground overflow-hidden">
-      {showHeartAnimation && <FloatingHearts />} {/* Conditionally render FloatingHearts */}
+      {showHeartAnimation && <FloatingHearts />}
       {!isGiftOpened ? (
         <GiftBox onOpen={handleOpenGift} />
       ) : (
@@ -122,7 +129,7 @@ export default function HomePage() {
             variant="ghost" 
             size="icon" 
             onClick={toggleMute} 
-            aria-label={isMuted ? "Unmute" : "Mute"} 
+            aria-label={isMuted ? "Unmute Background Music" : "Mute Background Music"} 
             className="rounded-full bg-card/70 hover:bg-card/90 backdrop-blur-sm p-2 shadow-md"
           >
             {isMuted ? <VolumeX className="h-5 w-5 text-primary" /> : <Volume2 className="h-5 w-5 text-primary" />}

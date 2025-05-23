@@ -8,7 +8,7 @@ import { Heart, Loader2, PlayCircle, Headphones } from 'lucide-react';
 
 interface BirthdayContentProps {
   poem: string | null;
-  isLoadingPoem: boolean;
+  // Removed: isLoadingPoem: boolean;
   onVoicePlayRequest: () => void;
   playVoiceTrigger: boolean;
   onVoiceEnded: () => void;
@@ -17,7 +17,7 @@ interface BirthdayContentProps {
 
 export default function BirthdayContent({
   poem,
-  isLoadingPoem,
+  // Removed: isLoadingPoem,
   onVoicePlayRequest,
   playVoiceTrigger,
   onVoiceEnded,
@@ -30,18 +30,18 @@ export default function BirthdayContent({
 
   useEffect(() => {
     const audio = new Audio('/voice.mp3'); // Assumes voice.mp3 is in /public
-    audio.volume = 1.0; // Full volume for voice message
+    audio.volume = 1.0; 
     voiceAudioRef.current = audio;
 
     const handleAudioEnd = () => {
       setIsVoicePlaying(false);
-      setVoiceButtonText("Play My Voice"); // Reset button text
-      onVoiceEnded(); // Signal parent that voice message has ended
+      setVoiceButtonText("Play My Voice"); 
+      onVoiceEnded(); 
     };
 
     const handleAudioError = (e: Event) => {
-      const audioEl = voiceAudioRef.current;
       let errorMessage = 'Voice audio playback error. ';
+      const audioEl = voiceAudioRef.current;
 
       if (audioEl && audioEl.error) {
         errorMessage += `Code: ${audioEl.error.code}. `;
@@ -54,8 +54,8 @@ export default function BirthdayContent({
       console.error(errorMessage);
 
       setIsVoicePlaying(false);
-      setVoiceButtonText("Couldn't Play Voice"); // Update button on error
-      onVoiceEnded(); // Still call onVoiceEnded to proceed with the flow
+      setVoiceButtonText("Couldn't Play Voice"); 
+      onVoiceEnded(); 
     };
 
     audio.addEventListener('ended', handleAudioEnd);
@@ -91,8 +91,8 @@ export default function BirthdayContent({
         console.error(playPromiseErrorMessage);
         
         setIsVoicePlaying(false);
-        setVoiceButtonText("Play My Voice"); // Reset on error
-        onVoiceEnded(); // Proceed if voice can't play
+        setVoiceButtonText("Play My Voice"); 
+        onVoiceEnded(); 
       });
     }
   }, [playVoiceTrigger, onVoiceEnded, isVoicePlaying]);
@@ -139,12 +139,7 @@ export default function BirthdayContent({
 
       {showFinalSurprise && (
         <div className="mt-6 md:mt-8 space-y-4 md:space-y-6 animate-heartFade-anim w-full">
-          {isLoadingPoem && !poem && (
-            <div className="flex items-center justify-center text-muted-foreground p-4">
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              <span>Crafting a special verse for you...</span>
-            </div>
-          )}
+          {/* Removed isLoadingPoem conditional block */}
           {poem && (
             <div className="p-4 md:p-6 bg-primary/10 rounded-xl shadow-inner backdrop-blur-sm border border-primary/20">
               <h2 className="text-xl md:text-2xl font-semibold text-primary mb-2 md:mb-3">A Little Poem For You:</h2>
@@ -177,4 +172,3 @@ export default function BirthdayContent({
     </div>
   );
 }
-

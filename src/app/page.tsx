@@ -5,22 +5,31 @@ import { useState, useEffect, useRef } from 'react';
 import GiftBox from '@/components/GiftBox';
 import BirthdayContent from '@/components/BirthdayContent';
 import FloatingHearts from '@/components/FloatingHearts';
-import { generatePoem, type GeneratePoemInput } from '@/ai/flows/generate-poem';
+// Removed: import { generatePoem, type GeneratePoemInput } from '@/ai/flows/generate-poem';
 import { Button } from '@/components/ui/button';
 import { Volume2, VolumeX } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-// Configuration for the poem - user (boyfriend) would set this
-const POEM_CONFIG: GeneratePoemInput = {
-  girlfriendName: "My Dearest Love", // Customize this
-  relationshipDetails: "Every moment with you is a cherished memory, a beautiful song. Our laughter, our dreams, the way our hands fit perfectly together.", // Customize this
-  affectionHints: "You are the melody in my heart, the sunshine in my sky. My love for you is as vast as the universe and as deep as the ocean.", // Customize this
-};
+// The user-provided static poem
+const staticPoem = `Today’s your day, so full of cheer,
+I’m so glad you are so near.
+You make me smile, you make me laugh,
+You light my world like a photograph.
+
+You are so kind, so strong, so true,
+There’s no one else quite like you.
+You’re always there, through thick and thin,
+With you beside me, I always win.
+
+So on this day, I wish you joy,
+More than any gift or toy.
+May your dreams all come your way,
+Happy, happy birthday!`;
 
 export default function HomePage() {
   const [isGiftOpened, setIsGiftOpened] = useState(false);
   const [generatedPoem, setGeneratedPoem] = useState<string | null>(null);
-  const [isLoadingPoem, setIsLoadingPoem] = useState(false);
+  // Removed: const [isLoadingPoem, setIsLoadingPoem] = useState(false);
   const [showFinalSurprise, setShowFinalSurprise] = useState(false);
   const [playVoiceTrigger, setPlayVoiceTrigger] = useState(false);
   const [showHeartAnimation, setShowHeartAnimation] = useState(false);
@@ -33,10 +42,9 @@ export default function HomePage() {
     // Initialize background music
     const bgMusic = new Audio('/happy-birthday.mp3'); // Assumes happy-birthday.mp3 is in /public
     bgMusic.loop = true;
-    bgMusic.volume = 0.4; // Example volume
+    bgMusic.volume = 0.4; 
     backgroundMusicRef.current = bgMusic;
     
-    // Set initial muted state based on audio element's actual muted state
     setIsMuted(bgMusic.muted); 
 
     return () => {
@@ -69,26 +77,12 @@ export default function HomePage() {
       }
     }
 
-    setIsLoadingPoem(true);
-    try {
-      const poemOutput = await generatePoem(POEM_CONFIG);
-      setGeneratedPoem(poemOutput.poem);
-    } catch (error) {
-      console.error("Failed to generate poem:", error);
-      setGeneratedPoem("My dearest, words may fail to capture all I feel, but know my love for you is truer than any poem could ever be. Happy Birthday."); // Fallback
-      toast({
-        title: "Poem Generation Error",
-        description: "Could not generate a custom poem, but a heartfelt message is here for you.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoadingPoem(false);
-    }
+    // Set the static poem directly
+    setGeneratedPoem(staticPoem);
   };
 
   const handleVoicePlayRequest = () => {
     if (backgroundMusicRef.current) {
-      // Ensure the muted state is respected
       backgroundMusicRef.current.muted = isMuted;
       if (backgroundMusicRef.current.paused) {
         backgroundMusicRef.current.play().catch(error => {
@@ -127,7 +121,7 @@ export default function HomePage() {
       ) : (
         <BirthdayContent
           poem={generatedPoem}
-          isLoadingPoem={isLoadingPoem}
+          // Removed: isLoadingPoem={isLoadingPoem}
           onVoicePlayRequest={handleVoicePlayRequest}
           playVoiceTrigger={playVoiceTrigger}
           onVoiceEnded={handleVoiceEnded}

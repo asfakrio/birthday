@@ -665,20 +665,9 @@ function HomePage() {
         setGeneratedPoem(staticPoem);
     };
     const handleVoicePlayRequest = ()=>{
-        if (backgroundMusicRef.current) {
-            backgroundMusicRef.current.muted = isMuted;
-            if (backgroundMusicRef.current.paused) {
-                backgroundMusicRef.current.play().catch((error)=>{
-                    console.error("Error trying to play background music on voice request:", error);
-                    toast({
-                        title: "Music Playback Issue",
-                        description: "Could not start background music. You can try the mute/unmute button.",
-                        variant: "default"
-                    });
-                });
-            }
-        }
-        setPlayVoiceTrigger(true);
+        // This function now only triggers the voice message.
+        // Background music playback is handled by handleOpenGift and toggleMute.
+        setPlayVoiceTrigger(true); // This will trigger the voice in BirthdayContent
     };
     const handleVoiceEnded = ()=>{
         setShowFinalSurprise(true);
@@ -689,7 +678,14 @@ function HomePage() {
             backgroundMusicRef.current.muted = currentMutedState;
             setIsMuted(currentMutedState);
             if (!currentMutedState && backgroundMusicRef.current.paused) {
-                backgroundMusicRef.current.play().catch((err)=>console.error("Error playing music on unmute:", err));
+                backgroundMusicRef.current.play().catch((err)=>{
+                    console.error("Error playing music on unmute:", err);
+                    toast({
+                        title: "Music Playback Issue",
+                        description: "Could not start background music automatically. Please ensure sound is enabled for your browser.",
+                        variant: "default"
+                    });
+                });
             }
         }
     };
@@ -698,14 +694,14 @@ function HomePage() {
         children: [
             showHeartAnimation && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$FloatingHearts$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 118,
+                lineNumber: 114,
                 columnNumber: 30
             }, this),
             !isGiftOpened ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$GiftBox$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                 onOpen: handleOpenGift
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 120,
+                lineNumber: 116,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$BirthdayContent$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                 poem: generatedPoem,
@@ -716,7 +712,7 @@ function HomePage() {
                 showFinalSurprise: showFinalSurprise
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 122,
+                lineNumber: 118,
                 columnNumber: 9
             }, this),
             isGiftOpened && backgroundMusicRef.current && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -731,29 +727,29 @@ function HomePage() {
                         className: "h-5 w-5 text-primary"
                     }, void 0, false, {
                         fileName: "[project]/src/app/page.tsx",
-                        lineNumber: 140,
+                        lineNumber: 136,
                         columnNumber: 24
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$volume$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Volume2$3e$__["Volume2"], {
                         className: "h-5 w-5 text-primary"
                     }, void 0, false, {
                         fileName: "[project]/src/app/page.tsx",
-                        lineNumber: 140,
+                        lineNumber: 136,
                         columnNumber: 71
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/app/page.tsx",
-                    lineNumber: 133,
+                    lineNumber: 129,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 132,
+                lineNumber: 128,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/page.tsx",
-        lineNumber: 117,
+        lineNumber: 113,
         columnNumber: 5
     }, this);
 }

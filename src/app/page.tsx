@@ -42,10 +42,10 @@ export default function HomePage() {
     // Initialize background music
     const bgMusic = new Audio('/happy-birthday.mp3'); // Assumes happy-birthday.mp3 is in /public
     bgMusic.loop = true;
-    bgMusic.volume = 0.4; 
+    bgMusic.volume = 0.4;
     backgroundMusicRef.current = bgMusic;
-    
-    setIsMuted(bgMusic.muted); 
+
+    setIsMuted(bgMusic.muted);
 
     return () => {
       if (backgroundMusicRef.current) {
@@ -65,14 +65,14 @@ export default function HomePage() {
 
     if (backgroundMusicRef.current) {
       try {
-        backgroundMusicRef.current.muted = isMuted; 
+        backgroundMusicRef.current.muted = isMuted;
         await backgroundMusicRef.current.play();
       } catch (error) {
         console.error("Background music autoplay error:", error);
         toast({
           title: "Music Playback Notice",
           description: "Browser may have prevented automatic music playback. Use the mute/unmute button to control sound.",
-          variant: "default", 
+          variant: "default",
         });
       }
     }
@@ -82,20 +82,9 @@ export default function HomePage() {
   };
 
   const handleVoicePlayRequest = () => {
-    if (backgroundMusicRef.current) {
-      backgroundMusicRef.current.muted = isMuted;
-      if (backgroundMusicRef.current.paused) {
-        backgroundMusicRef.current.play().catch(error => {
-          console.error("Error trying to play background music on voice request:", error);
-          toast({
-            title: "Music Playback Issue",
-            description: "Could not start background music. You can try the mute/unmute button.",
-            variant: "default", 
-          });
-        });
-      }
-    }
-    setPlayVoiceTrigger(true); 
+    // This function now only triggers the voice message.
+    // Background music playback is handled by handleOpenGift and toggleMute.
+    setPlayVoiceTrigger(true); // This will trigger the voice in BirthdayContent
   };
 
   const handleVoiceEnded = () => {
@@ -108,11 +97,18 @@ export default function HomePage() {
       backgroundMusicRef.current.muted = currentMutedState;
       setIsMuted(currentMutedState);
       if (!currentMutedState && backgroundMusicRef.current.paused) {
-        backgroundMusicRef.current.play().catch(err => console.error("Error playing music on unmute:", err));
+        backgroundMusicRef.current.play().catch(err => {
+            console.error("Error playing music on unmute:", err);
+            toast({
+                title: "Music Playback Issue",
+                description: "Could not start background music automatically. Please ensure sound is enabled for your browser.",
+                variant: "default",
+            });
+        });
       }
     }
   };
-  
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground p-4 selection:bg-primary/30 selection:text-primary-foreground overflow-hidden">
       {showHeartAnimation && <FloatingHearts />}
@@ -130,11 +126,11 @@ export default function HomePage() {
       )}
        {isGiftOpened && backgroundMusicRef.current && (
         <div className="fixed top-6 right-6 z-50">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={toggleMute} 
-            aria-label={isMuted ? "Unmute Background Music" : "Mute Background Music"} 
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleMute}
+            aria-label={isMuted ? "Unmute Background Music" : "Mute Background Music"}
             className="rounded-full bg-card/70 hover:bg-card/90 backdrop-blur-sm p-2 shadow-md"
           >
             {isMuted ? <VolumeX className="h-5 w-5 text-primary" /> : <Volume2 className="h-5 w-5 text-primary" />}

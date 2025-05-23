@@ -125,7 +125,7 @@ function GiftBox({ onOpen }) {
                                 className: "absolute inset-x-0 top-1 h-2 bg-pink-300/50 rounded-t-md"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GiftBox.tsx",
-                                lineNumber: 44,
+                                lineNumber: 45,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -135,26 +135,26 @@ function GiftBox({ onOpen }) {
                                         className: "w-3 h-6 bg-accent rounded-t-full opacity-90 -rotate-45 relative -mr-1 inline-block"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/GiftBox.tsx",
-                                        lineNumber: 47,
+                                        lineNumber: 48,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "w-3 h-6 bg-accent rounded-t-full opacity-90 rotate-45 relative -ml-1 inline-block"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/GiftBox.tsx",
-                                        lineNumber: 48,
+                                        lineNumber: 49,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/GiftBox.tsx",
-                                lineNumber: 46,
+                                lineNumber: 47,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/GiftBox.tsx",
-                        lineNumber: 38,
+                        lineNumber: 39,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -165,14 +165,14 @@ function GiftBox({ onOpen }) {
                                 className: "absolute w-6 md:w-8 h-[110%] bg-accent opacity-80 top-[-5%] left-1/2 -translate-x-1/2"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GiftBox.tsx",
-                                lineNumber: 54,
+                                lineNumber: 55,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "absolute h-6 md:h-8 w-[105%] bg-accent opacity-80 left-[-2.5%] top-1/2 -translate-y-[70%]"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GiftBox.tsx",
-                                lineNumber: 56,
+                                lineNumber: 57,
                                 columnNumber: 11
                             }, this),
                             " ",
@@ -180,36 +180,36 @@ function GiftBox({ onOpen }) {
                                 className: "w-12 h-12 md:w-16 md:h-16 text-white opacity-20 z-10 relative"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GiftBox.tsx",
-                                lineNumber: 57,
+                                lineNumber: 58,
                                 columnNumber: 12
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/GiftBox.tsx",
-                        lineNumber: 52,
+                        lineNumber: 53,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/GiftBox.tsx",
-                lineNumber: 36,
+                lineNumber: 37,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                 onClick: handleOpenClick,
                 disabled: isOpening,
                 className: "px-6 py-3 md:px-8 md:py-4 text-md md:text-lg font-semibold bg-accent hover:bg-purple-500 text-accent-foreground rounded-full shadow-lg transition-all hover:shadow-xl transform hover:scale-105 focus-visible:ring-4 focus-visible:ring-accent/50",
-                "aria-label": "Open Your Surprise",
-                children: isOpening ? 'Opening...' : 'Open Your Surprise!'
+                "aria-label": "Open Your Surprise Nani",
+                children: isOpening ? 'Opening...' : 'Open Your Surprise Nani!'
             }, void 0, false, {
                 fileName: "[project]/src/components/GiftBox.tsx",
-                lineNumber: 60,
+                lineNumber: 61,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/GiftBox.tsx",
-        lineNumber: 35,
+        lineNumber: 36,
         columnNumber: 5
     }, this);
 }

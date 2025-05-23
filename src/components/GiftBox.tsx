@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -61,9 +62,9 @@ export default function GiftBox({ onOpen }: GiftBoxProps) {
         onClick={handleOpenClick}
         disabled={isOpening}
         className="px-6 py-3 md:px-8 md:py-4 text-md md:text-lg font-semibold bg-accent hover:bg-purple-500 text-accent-foreground rounded-full shadow-lg transition-all hover:shadow-xl transform hover:scale-105 focus-visible:ring-4 focus-visible:ring-accent/50"
-        aria-label="Open Your Surprise"
+        aria-label="Open Your Surprise Nani"
       >
-        {isOpening ? 'Opening...' : 'Open Your Surprise!'}
+        {isOpening ? 'Opening...' : 'Open Your Surprise Nani!'}
       </Button>
     </div>
   );

@@ -8,7 +8,6 @@ import { Heart, Loader2, PlayCircle, Headphones } from 'lucide-react';
 
 interface BirthdayContentProps {
   poem: string | null;
-  // Removed: isLoadingPoem: boolean;
   onVoicePlayRequest: () => void;
   playVoiceTrigger: boolean;
   onVoiceEnded: () => void;
@@ -17,7 +16,6 @@ interface BirthdayContentProps {
 
 export default function BirthdayContent({
   poem,
-  // Removed: isLoadingPoem,
   onVoicePlayRequest,
   playVoiceTrigger,
   onVoiceEnded,
@@ -139,7 +137,6 @@ export default function BirthdayContent({
 
       {showFinalSurprise && (
         <div className="mt-6 md:mt-8 space-y-4 md:space-y-6 animate-heartFade-anim w-full">
-          {/* Removed isLoadingPoem conditional block */}
           {poem && (
             <div className="p-4 md:p-6 bg-primary/10 rounded-xl shadow-inner backdrop-blur-sm border border-primary/20">
               <h2 className="text-xl md:text-2xl font-semibold text-primary mb-2 md:mb-3">A Little Poem For You:</h2>
@@ -153,7 +150,7 @@ export default function BirthdayContent({
               You’re not just older, you’re more loved than ever.
             </p>
             <p className="text-lg md:text-xl font-semibold text-primary mt-1 md:mt-2">
-              Happy Birthday, my heartbeat.
+              Happy Birthday Best Friend
             </p>
           </div>
 

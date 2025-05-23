@@ -106,7 +106,7 @@ export default function BirthdayContent({
       <div className="mb-6 md:mb-8">
         <TypeAnimation
           sequence={[
-            "Happy Birthday, My Love...",
+            "Happy Birthday Nani...", // Changed text here
             2500,
             "This day is special because of you.",
             2500,
